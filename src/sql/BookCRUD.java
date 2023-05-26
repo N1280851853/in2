@@ -9,10 +9,10 @@ import java.util.Scanner;
 public class BookCRUD {
     static Scanner scanner = new Scanner(System.in);
     static String tableName2 = "book";  //表示表名
+
     public static void add() { //添加
         Statement stmt;
         try {
-
             stmt = Conn.con.createStatement();
             System.out.print("请输入你要插入的图书编号:");
             String newID = scanner.next() ;  //存放 id(图书编号) 不能为空
@@ -59,9 +59,6 @@ public class BookCRUD {
     public static void delete() { //删除
         Statement stmt;
         try {
-            if (Conn.con.isClosed()) {
-                Conn.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/books?useUnicode=true&characterEncoding=gbk", Conn.user, Conn.password);
-            }
             stmt = Conn.con.createStatement();
             if(Borrow.scanBookID()) {
                 String sql = "delete from " + tableName2 + " where Book_id=" + Borrow.bookID;  //根据id来进行删除
@@ -80,6 +77,7 @@ public class BookCRUD {
         Statement stmt;
         try {
             if(Borrow.scanBookID()) {
+
                 System.out.print("请输入你要更新的图书编号:");
                 String newID = scanner.next(); //图书编号
 

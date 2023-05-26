@@ -8,9 +8,6 @@ import java.sql.Statement;
 public class Login {
     public static boolean log() {
         try {
-            if (Conn.con.isClosed()) {
-                Conn.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/books?useUnicode=true&characterEncoding=gbk", Conn.user, Conn.password);
-            }
             Statement stmt;
             stmt = Conn.con.createStatement();
             System.out.print("请输入你的登录账户:");
