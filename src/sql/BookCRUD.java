@@ -12,8 +12,15 @@ public class BookCRUD {
     public static void add() { //添加
         Statement stmt;
         try {
+
+            stmt = Conn.con.createStatement();
             System.out.print("请输入你要插入的图书编号:");
-            String newID = scanner.next() ;  //存放 id(图书编号)
+            String newID = scanner.next() ;  //存放 id(图书编号) 不能为空
+            ResultSet rs = stmt.executeQuery("select Book_id from book where Book_id=\'" + newID +"\'");
+            if(rs.next()) {
+                System.out.println("你输入的图书id已经存在");
+                return;
+            }
 
             System.out.print("请输入您要插入的图书名字:");
             String newName = scanner.next(); //新的书名
@@ -56,7 +63,6 @@ public class BookCRUD {
                 Conn.con = DriverManager.getConnection("jdbc:mysql://localhost:3306/books?useUnicode=true&characterEncoding=gbk", Conn.user, Conn.password);
             }
             stmt = Conn.con.createStatement();
-            int deleteID = 0;  //存放 id(图书id)
             if(Borrow.scanBookID()) {
                 String sql = "delete from " + tableName2 + " where Book_id=" + Borrow.bookID;  //根据id来进行删除
                 stmt.executeUpdate(sql);

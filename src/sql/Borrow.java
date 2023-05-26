@@ -45,7 +45,7 @@ public class Borrow { //借还信息管理模块
             ResultSet rs = stmt.executeQuery("select Book_id from book where Book_id=\'" + bookID + "\'"); //将查询结果放在 ResultSet 集合
             if(rs.next()) {
                 String inquireBookID = rs.getString(1);
-                if(stuID.equals(inquireBookID)) {
+                if(bookID.equals(inquireBookID)) {
                     return true;
                 }
             }
@@ -249,7 +249,7 @@ public class Borrow { //借还信息管理模块
 
             writer.flush();
             writer.close();
-            System.out.println("derive success!");
+            System.out.println("derive success! 文件路径:d://borrow.txt");
             rs.close();
             stmt.close();
         } catch (Exception e) {

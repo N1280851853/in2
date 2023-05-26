@@ -13,9 +13,14 @@ public class StuCRUD {  //学生表的 CRUD 模块
     public static void add() {
         Statement stmt;
         try {
-
+            stmt = Conn.con.createStatement();
             System.out.print("请输入你要插入的学生学号:");
             String newID = scanner.nextLine(); //学生学号 不能为空
+            ResultSet rs = stmt.executeQuery("select Stu_id from student where Stu_id=\'" + newID +"\'");
+            if(rs.next()) {
+                System.out.println("你输入的学生id已经存在");
+                return;
+            }
 
             System.out.print("请输入您要插入的学生姓名:");
             String newName = scanner.next(); //新的姓名
@@ -34,7 +39,7 @@ public class StuCRUD {  //学生表的 CRUD 模块
                     newGender + "\',\'" +
                     newAge + "\',\'" +
                     newTel + "\')";
-            stmt = Conn.con.createStatement();
+
             stmt.executeUpdate(sql);
             stmt.close();
             System.out.println("insert success!");
