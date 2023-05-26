@@ -57,20 +57,14 @@ public class BookCRUD {
             }
             stmt = Conn.con.createStatement();
             int deleteID = 0;  //存放 id(图书id)
-            while (true) {
-                try {
-                    System.out.print("请输入你要删除图书编号:");
-                    deleteID = Integer.parseInt(scanner.next());
-                    break;
-                } catch (Exception e) {
-                    System.out.println("你输入的id格式有误，请重新输入");
-                }
+            if(Borrow.scanBookID()) {
+                String sql = "delete from " + tableName2 + " where Book_id=" + Borrow.bookID;  //根据id来进行删除
+                stmt.executeUpdate(sql);
+                stmt.close();
+                System.out.println("delete success!");
+                return;
             }
-            String sql = "delete from " + tableName2 + " where Book_id=" + deleteID;  //根据id来进行删除
-            stmt.executeUpdate(sql);
-            stmt.close();
-            System.out.println("delete success!");
-            return;
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -79,40 +73,41 @@ public class BookCRUD {
     public static void upDate() { //更新
         Statement stmt;
         try {
-            System.out.print("请输入你要替换的图书编号:");
-            String oldID = scanner.next(); //图书编号
+            if(Borrow.scanBookID()) {
+                System.out.print("请输入你要更新的图书编号:");
+                String newID = scanner.next(); //图书编号
 
-            System.out.print("请输入你要更新的图书编号:");
-            String newID = scanner.next(); //图书编号
+                System.out.print("请输入您要更新的书名:");
+                String newName = scanner.next(); //新的书名
 
-            System.out.print("请输入您要更新的书名:");
-            String newName = scanner.next(); //新的书名
+                System.out.print("请输入您要更新的图书作者:");
+                String newAuthor = scanner.next(); //新的性别
 
-            System.out.print("请输入您要更新的图书作者:");
-            String newAuthor = scanner.next(); //新的性别
-
-            int upInv = 0;  //库存(图书库存)
-            while (true) {
-                try {
-                    System.out.print("请输入你要更新图书库存:");
-                    upInv = Integer.parseInt(scanner.next());
-                    break;
-                } catch (Exception e) {
-                    System.out.println("你输入的格式有误，请重新输入");
+                int upInv = 0;  //库存(图书库存)
+                while (true) {
+                    try {
+                        System.out.print("请输入你要更新图书库存:");
+                        upInv = Integer.parseInt(scanner.next());
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("你输入的格式有误，请重新输入");
+                    }
                 }
+
+                stmt = Conn.con.createStatement();
+                String sql = "update " + tableName2 +
+                        " set Book_id=\'" + newID + "\'," +
+                        "Name=\'" + newName +"\'," +
+                        "Author=\'" + newAuthor + "\'," +
+                        "Inventery=\'" + upInv + "\'" +
+                        " where Book_id=\'" + Borrow.bookID + "\'";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                System.out.println("change success!");
+                return;
             }
 
-            stmt = Conn.con.createStatement();
-            String sql = "update " + tableName2 +
-                    " set Book_id=\'" + newID + "\'," +
-                    "Name=\'" + newName +"\'," +
-                    "Author=\'" + newAuthor + "\'," +
-                    "Inventery=\'" + upInv + "\'" +
-                    " where Book_id=\'" + oldID + "\'";
-            stmt.executeUpdate(sql);
-            stmt.close();
-            System.out.println("change success!");
-            return;
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

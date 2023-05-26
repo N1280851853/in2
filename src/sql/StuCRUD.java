@@ -49,12 +49,13 @@ public class StuCRUD {  //学生表的 CRUD 模块
         Statement stmt;
         try {
             stmt = Conn.con.createStatement();
-            Borrow.scan();
-            String sql = "delete from " + tableName1 + " where Stu_id=" + Borrow.stuID;  //根据id来进行删除
-            stmt.executeUpdate(sql);
-            stmt.close();
-            System.out.println("delete success!");
-            return;
+            if (Borrow.scan()) {
+                String sql = "delete from " + tableName1 + " where Stu_id=" + Borrow.stuID;  //根据id来进行删除
+                stmt.executeUpdate(sql);
+                stmt.close();
+                System.out.println("delete success!");
+                return;
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -64,35 +65,36 @@ public class StuCRUD {  //学生表的 CRUD 模块
         Statement stmt;
         try {
 
-            System.out.print("请输入你要替换的学生学号:");
-            String oldID = scanner.next(); //学生学号
+            if(Borrow.scan()) {
+                System.out.print("请输入你要更新的学生学号:");
+                String newID = scanner.next(); //学生学号
 
-            System.out.print("请输入你要更新的学生学号:");
-            String newID = scanner.next(); //学生学号
+                System.out.print("请输入您要更新的学生姓名:");
+                String newName = scanner.next(); //新的姓名
 
-            System.out.print("请输入您要更新的学生姓名:");
-            String newName = scanner.next(); //新的姓名
+                System.out.print("请输入您要更新的学生性别:");
+                char newGender = scanner.next().charAt(0); //新的性别
 
-            System.out.print("请输入您要更新的学生性别:");
-            char newGender = scanner.next().charAt(0); //新的性别
+                System.out.print("请输入您要更新的学生年龄:");
+                int newAge = scanner.nextInt();  //新的年龄
 
-            System.out.print("请输入您要更新的学生年龄:");
-            int newAge = scanner.nextInt();  //新的年龄
+                System.out.print("请输入您要更新的学生电话号码:");
+                String newTel = scanner.next();
 
-            System.out.print("请输入您要更新的学生电话号码:");
-            String newTel = scanner.next();
+                stmt = Conn.con.createStatement();
+                String sql = "update " + tableName1 + " set Stu_id=\'" + newID + "\'," +
+                        "name=\'" + newName +"\'," +
+                        "gender=\'" + newGender + "\'," +
+                        "age=\'" + newAge + "\'," +
+                        "Stu_tel=\'" + newTel + "\'" +
+                        " where Stu_id=\'" + Borrow.stuID + "\'";
+                stmt.executeUpdate(sql);
+                stmt.close();
+                System.out.println("change success!");
+                return;
+            }
 
-            stmt = Conn.con.createStatement();
-            String sql = "update " + tableName1 + " set Stu_id=\'" + newID + "\'," +
-                    "name=\'" + newName +"\'," +
-                    "gender=\'" + newGender + "\'," +
-                    "age=\'" + newAge + "\'," +
-                    "Stu_tel=\'" + newTel + "\'" +
-                    " where Stu_id=\'" + oldID + "\'";
-            stmt.executeUpdate(sql);
-            stmt.close();
-            System.out.println("change success!");
-            return;
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

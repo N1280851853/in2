@@ -14,6 +14,7 @@ public class Borrow { //借还信息管理模块
     static Scanner scanner = new Scanner(System.in);
     static String stuID;
     static String bookName;
+    static String bookID;
 
     public static boolean scan() {  //输入学号 判断是否存在
         try {
@@ -29,6 +30,26 @@ public class Borrow { //借还信息管理模块
                 }
             }
             System.out.println("你输入的学号不存在！");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean scanBookID() {
+        try {
+            Statement stmt;
+            stmt = Conn.con.createStatement();
+            System.out.print("请输入你的图书编号:");
+            bookID = scanner.next();
+            ResultSet rs = stmt.executeQuery("select Book_id from book where Book_id=\'" + bookID + "\'"); //将查询结果放在 ResultSet 集合
+            if(rs.next()) {
+                String inquireBookID = rs.getString(1);
+                if(stuID.equals(inquireBookID)) {
+                    return true;
+                }
+            }
+            System.out.println("你输入的图书编号不存在！");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
