@@ -117,36 +117,27 @@ public class BookCRUD {
 
     public static void showStudent() {  //查询
         Statement stmt;
-        System.out.print("请输入您要查询的字段(Book_id、Name、Author、Inventery(库存)或'*'):");
+        System.out.print("请输入您要查询的字段(Name、或'*'):");
         String field = scanner.next();
-        String sql = "select " + field + " from " + tableName2;    //要执行的SQL
         try {
             stmt = Conn.con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);//创建数据对象
-            if(field.equals("Book_id")) {
-                System.out.println("====图书编号====");
-                while(rs.next()) {
-                    System.out.println(rs.getString("Book_id"));  //写成String 类型
-                }
-            } else if(field.equals("Name")) {
-                System.out.println("====图书名====");
-                while(rs.next()) {
-                    System.out.println(rs.getString("Name"));
-                }
-            } else if(field.equals("Author")) {
-                System.out.println("====图书作者====");
-                while(rs.next()) {
-                    System.out.println(rs.getString("Author"));
-                }
-            } else if(field.equals("Inventery")) {
-                System.out.println("====图书库存数量====");
-                while(rs.next()) {
-                    System.out.println(rs.getInt("Inventery"));
+            if(field.equals("Name")) {
+                System.out.print("请输入你要查询的图书名:");
+                String name = scanner.next();
+                ResultSet rs = stmt.executeQuery("select * from " + tableName2 + " where Name=\'" + name + "\'");//创建数据对象
+                System.out.println("====查询到的记录====");
+                if(rs.next()) {
+                    System.out.print(rs.getString(1) + "\t\t\t");
+                    System.out.print(rs.getString(2) + " \t\t");
+                    System.out.print(rs.getString(3) + "\t\t");
+                    System.out.print(rs.getString(4) + "\n");
                 }
             } else if(field.equals("*")) {
+                String sql = "select " + field + " from " + tableName2;    //要执行的SQL
+                ResultSet rs = stmt.executeQuery(sql);//创建数据对象
                 System.out.println("图书编号 \t书名 \t\t作者 \t\t库存");
                 while (rs.next()) {
-                    System.out.print(rs.getInt(1) + "\t\t\t");
+                    System.out.print(rs.getString(1) + "\t\t\t");
                     System.out.print(rs.getString(2) + " \t\t");
                     System.out.print(rs.getString(3) + "\t\t");
                     System.out.print(rs.getString(4));
@@ -156,7 +147,7 @@ public class BookCRUD {
                 System.out.println("你输入的字段有误！");
             }
 
-            rs.close();
+
             stmt.close();
             return;
         } catch (SQLException throwables) {
